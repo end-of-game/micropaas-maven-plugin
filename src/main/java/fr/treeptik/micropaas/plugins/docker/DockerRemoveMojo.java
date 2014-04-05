@@ -10,9 +10,15 @@ public class DockerRemoveMojo extends DockerMojo {
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
-            removeContainer();
+        	getLog().info("Trying to remove container with name " + containerName);
+        	if (isContainerExist(containerName)){
+        		removeContainer();
+        	}else{
+        		getLog().warn("+-- Container " + containerName + " does not exist ");
+        	}
+        	getLog().info("Container with name " + containerName + " has been remove");
         } catch (DockerException e) {
-            throw new MojoExecutionException("Error while trying to remove container " +  getContainerId(), e);
+            throw new MojoExecutionException("Error while trying to remove container " +  containerName, e);
         }
     }
 }

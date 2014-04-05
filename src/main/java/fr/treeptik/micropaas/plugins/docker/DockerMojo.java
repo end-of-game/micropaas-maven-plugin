@@ -1,123 +1,102 @@
 package fr.treeptik.micropaas.plugins.docker;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import com.kpelykh.docker.client.DockerClient;
 import com.kpelykh.docker.client.DockerException;
+import com.kpelykh.docker.client.model.Container;
 import com.kpelykh.docker.client.model.ContainerConfig;
 import com.kpelykh.docker.client.model.ContainerCreateResponse;
+import com.kpelykh.docker.client.model.ContainerInspectResponse;
 import com.kpelykh.docker.client.model.HostConfig;
 
 public abstract class DockerMojo extends AbstractMojo {
 
-    private static final String DEFAULT_URL = "http://localhost:4243";
+    protected static final String DEFAULT_URL = "http://localhost:4243";
 
-    private static final ThreadLocal<String> tlContainerId = new ThreadLocal<String>();
-
-    private ContainerConfig containerConfig;
-    private DockerClient dockerClient;
+    protected ContainerConfig containerConfig;
+    protected DockerClient dockerClient;
 
     @Parameter(required = true)
-    private String containerImage;
+    protected String containerImage;
     
     @Parameter(required = true)
-    private String containerName;
+    protected String containerName;
     
     @Parameter(defaultValue = DEFAULT_URL)
-    private String urlDockerManager;
+    protected String urlDockerManager;
 
     @Parameter
-    private String containerId;
+    protected String containerId;
     
     @Parameter
-    private String[] cmds;
+    protected String[] cmds;
     
     @Parameter
-    private String[] exposedPorts;
+    protected String[] exposedPorts;
     
 
-
-    /**
-     * Creates a container in Docker and stores the container id in a ThreadLocal variable
-     * so that it can be accessed by other goals of the plugin.
-     *
-     * @throws DockerException
-     */
     protected void createContainer() throws DockerException {
-        getLog().debug(String.format("Creating new container"));
 
         final ContainerCreateResponse response = getDockerClient().createContainer(getContainerConfig(), containerName);
-        final String containerId = response.getId();
-        getLog().info(String.format("Created container with id %s", containerId));
-        DockerMojo.tlContainerId.set(containerId);
+        getLog().info("Created container with name " + containerName + " and ID " + response.getId());
     }
 
     protected void startContainer() throws DockerException {
     	
-        getLog().debug(String.format("Trying to start container %s", getContainerId()));
-        validateContainerId();
         
         HostConfig hostConfig = new HostConfig();
         hostConfig.setPublishAllPorts(true);
         
-        getDockerClient().startContainer(getContainerId(), hostConfig);
+        getDockerClient().startContainer(containerName, hostConfig);
+        
     }
 
     protected void stopContainer() throws DockerException {
-        getLog().debug(String.format("Trying to stop container %s", getContainerId()));
-        validateContainerId();
-        getDockerClient().stopContainer(getContainerId());
+        getDockerClient().stopContainer(containerName);
     }
 
     protected void removeContainer() throws DockerException {
-        getLog().debug(String.format("Trying to remove container %s", getContainerId()));
-        validateContainerId();
-        final String containerId = this.getContainerId();
-        getDockerClient().removeContainer(containerId);
-        DockerMojo.tlContainerId.set(null);
-        getLog().info(String.format("Container %s has been removed", containerId));
+        getDockerClient().removeContainer(containerName);
     }
 
 
     protected void restartContainer() throws DockerException {
-        getLog().debug(String.format("Trying to restart container %s", getContainerId()));
-        validateContainerId();
-        final String containerId = this.getContainerId();
-        getDockerClient().restart(containerId, 10000);
-        getLog().info(String.format("Container %s has been restarted", getContainerId()));
+        getDockerClient().restart(containerName, 0);
     }
 
+    protected Boolean isContainerExist(String containerName)throws DockerException {
+    	List<Container> listContainers = getDockerClient().listContainers(true);
+    	for (Container container : listContainers) {
+    		List<String> containerNames = Arrays.asList(container.getNames());
+    		if (containerNames.contains("/"+containerName)){
+    			return true;
+    		}
+		}
+    	
+    	return false;
+    }
 
-    private void validateContainerId() {
-        if (getContainerId() == null) throw new IllegalStateException("There isn't any container id set.");
+    protected Boolean isContainerUp(String containerName)throws DockerException {
+    	ContainerInspectResponse inspectContainer = getDockerClient().inspectContainer(containerName);
+    	return inspectContainer.getState().running;
+    	
     }
 
     
-    
-    
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                           Getter and Setters                                                   //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public ContainerConfig getContainerConfig() {
         if (containerConfig == null) {
             containerConfig = new ContainerConfig();
             if (getCmds() != null)  containerConfig.setCmd(getCmds());
             if (getContainerImage() != null) containerConfig.setImage(getContainerImage());
-            
-            
-            getLog().debug("Container configuration: " + containerConfig.toString());
         }
         return containerConfig;
     }
 
-    public static String getThreadLocalContainerId() {
-        return DockerMojo.tlContainerId.get();
-    }
-
-    public String getContainerId() {
-        return DockerMojo.tlContainerId.get() != null ? DockerMojo.tlContainerId.get() : containerId;
-    }
 
     public String getContainerImage() {
         return containerImage;

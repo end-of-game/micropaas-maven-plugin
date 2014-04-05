@@ -10,9 +10,15 @@ public class DockerStopMojo extends DockerMojo{
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
-            stopContainer();
+        	getLog().info("Trying to stop container with name " + containerName );
+        	if (isContainerUp(containerName)){
+        		stopContainer();
+        	} else {
+        		getLog().warn("+-- Container " + containerName + " already stopped ");
+        	}
+        	getLog().info("Container with name " + containerName + " has been stoped");
         } catch (DockerException e) {
-            throw new MojoExecutionException("Error while trying to remove container " + getContainerId(), e);
+            throw new MojoExecutionException("Error while trying to stop container " + containerName, e);
         }
     }
 }
