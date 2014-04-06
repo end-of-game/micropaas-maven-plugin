@@ -2,7 +2,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-
 	<groupId>fr.treeptik.micropaas.maven.plugins</groupId>
 	<artifactId>docker-maven-plugin</artifactId>
 	<version>0.0.1</version>
@@ -15,7 +14,7 @@
 		<plexus-utils.version>3.0.8</plexus-utils.version>
 		<maven-plugin-annotations.version>3.2</maven-plugin-annotations.version>
 		<commons-lang.version>2.6</commons-lang.version>
-		<maven-plugin-api.version>2.0</maven-plugin-api.version>
+		<maven-plugin-api.version>3.0.5</maven-plugin-api.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<docker-java.version>0.8.1</docker-java.version>
 		<java.version>1.6</java.version>
@@ -53,10 +52,17 @@
 			<artifactId>slf4j-simple</artifactId>
 			<version>${slf4j-simple.version}</version>
 		</dependency>
-		
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.50</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>3.0.5</version>
+        </dependency>
 	</dependencies>
-
-
 
 	<build>
 		<plugins>
@@ -94,17 +100,18 @@
 
 
 			<!-- For test and debugging -->
+
 			<plugin>
 				<groupId>fr.treeptik.micropaas.maven.plugins</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
 				<configuration>
-					<urlDockerManager>http://192.168.1.71:4243</urlDockerManager>
-					<containerImage>micropaas/tomcat7-mysql</containerImage>
-					<containerName>superProjetTest</containerName>
+					<urlDockerManager>http://192.168.1.98:4243</urlDockerManager>
+					<containerImage>tomcat-mysql</containerImage>
+					<containerName>test-plugin2</containerName>
 					<cmds>
 						<cmd>/bin/sh</cmd>
 						<cmd>start-service.sh</cmd>
-						<cmd>databaseName</cmd>
+						<cmd>test-plugin2</cmd>
 					</cmds>
 				</configuration>
 			</plugin>
