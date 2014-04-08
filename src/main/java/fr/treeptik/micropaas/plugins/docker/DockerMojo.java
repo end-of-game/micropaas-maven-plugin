@@ -50,6 +50,11 @@ public abstract class DockerMojo extends AbstractMojo {
         return fullPath;
     }
 
+    protected String getAbsoluteTargetDirectory() {
+        MavenProject mavenProject = (MavenProject) getPluginContext().get("project");
+        return mavenProject.getBuild().getDirectory();
+    }
+    
     protected void createContainer() throws DockerException {
 
         final ContainerCreateResponse response = getDockerClient().createContainer(getContainerConfig(), containerName);

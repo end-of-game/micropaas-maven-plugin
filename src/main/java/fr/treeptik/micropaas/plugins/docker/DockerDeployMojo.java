@@ -5,6 +5,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
 @Mojo(name = "deploy", defaultPhase = LifecyclePhase.DEPLOY)
 public class DockerDeployMojo extends DockerMojo {
@@ -32,15 +33,50 @@ public class DockerDeployMojo extends DockerMojo {
             getLog().debug("absolutePathWarFile : " + absolutePathWarFile);
             if (absolutePathWarFile != null) {
                 String warFileName = absolutePathWarFile.substring(absolutePathWarFile.lastIndexOf("/")+1);
-                String applicationName = warFileName.substring(0, warFileName.lastIndexOf("."));
+                
                 getLog().debug("warFileName : " + warFileName);
                 File file = new File(absolutePathWarFile);
+                // Test if file exist. Maybe a plugin change the file name (ex : maven-war-plugin)
+                // And search for Ear or War
+                if ( ! file.exists()){
+                	getLog().warn("File not found : " + absolutePathWarFile);
+                	getLog().warn("Search other files (ear and war) in " + getAbsoluteTargetDirectory());
+                	File directory = new File(getAbsoluteTargetDirectory());
+                	File[] files = directory.listFiles(new FilenameFilter() {
+						@Override
+						public boolean accept(File file, String name) {
+							return (name.endsWith(".ear") || name.endsWith(".war")) ? true : false;
+						}
+					});
+                	
+                	if (files.length > 1){
+                		getLog().warn("Found more than one application, search ear file");
+                		for (File f : files){
+                			if (f.getName().endsWith(".ear")){
+                				getLog().info("Found pplication : " + f.getName());
+                				file = f;
+                				break;
+                			}
+                		}
+                	} else {
+                		file = files[0];
+                		getLog().info("Found application : " + file.getName());
+                	}
+                	
+                	
+                	
+                	 
+                	
+                }
+                
+                String applicationName = file.getName().substring(0, file.getName().lastIndexOf("."));
+                
                 String sshForwardedPort = getForwardedPort("22");
                 String ipDocker = getIpDocker();
                 // Do not remove the final slash
                 sendFile(file, sshForwardedPort, ipDocker, "/deploy/");
                 // All caontainer images must have a script 'deploy.sh'
-                executeShell(ipDocker, sshForwardedPort, "/bin/sh /deploy.sh "  + warFileName, null);
+                executeShell(ipDocker, sshForwardedPort, "/bin/sh /deploy.sh "  + file.getName(), null);
 
                 String tomcatForwardPort = getForwardedPort("8080");
                 StringBuilder msgInfo = new StringBuilder(1024);
