@@ -4,6 +4,7 @@ import com.jcraft.jsch.*;
 import com.kpelykh.docker.client.DockerClient;
 import com.kpelykh.docker.client.DockerException;
 import com.kpelykh.docker.client.model.*;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -30,10 +31,11 @@ public abstract class DockerMojo extends AbstractMojo {
     protected String urlDockerManager;
 
     @Parameter
-    protected String containerId;
+	private String databaseName;
     
     @Parameter
-    protected String[] cmds;
+    protected String containerId;
+
     
     @Parameter
     protected String[] exposedPorts;
@@ -99,7 +101,11 @@ public abstract class DockerMojo extends AbstractMojo {
     public ContainerConfig getContainerConfig() {
         if (containerConfig == null) {
             containerConfig = new ContainerConfig();
-            if (getCmds() != null)  containerConfig.setCmd(getCmds());
+            
+            // All caontainer images must have a script 'start-service.sh'
+            String[] cmd = {"/bin/sh", "start-service.sh", databaseName};
+            containerConfig.setCmd(cmd);
+            
             if (getContainerImage() != null) containerConfig.setImage(getContainerImage());
         }
         return containerConfig;
@@ -123,13 +129,6 @@ public abstract class DockerMojo extends AbstractMojo {
         this.urlDockerManager = url;
     }
 
-    public String[] getCmds() {
-        return cmds;
-    }
-
-    public void setCmds(String[] cmds) {
-        this.cmds = cmds;
-    }
 
 	public String getContainerName() {
 		return containerName;
@@ -278,4 +277,5 @@ public abstract class DockerMojo extends AbstractMojo {
             throw new Exception("Error during file copying");
         }
     }
+
 }

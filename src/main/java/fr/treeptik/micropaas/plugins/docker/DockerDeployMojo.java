@@ -16,7 +16,19 @@ public class DockerDeployMojo extends DockerMojo {
      */
     public void execute() throws MojoExecutionException {
         try {
-            String absolutePathWarFile = getAbsolutePathWarFile();
+            
+        	if ( ! isContainerExist(containerName)){
+        		createContainer();
+        	}
+        	
+        	if (! isContainerUp(containerName)){
+        		startContainer();
+        		// Wait container / service start
+        		Thread.sleep(2000);
+        	}
+        	
+        	
+        	String absolutePathWarFile = getAbsolutePathWarFile();
             getLog().debug("absolutePathWarFile : " + absolutePathWarFile);
             if (absolutePathWarFile != null) {
                 String warFileName = absolutePathWarFile.substring(absolutePathWarFile.lastIndexOf("/")+1);
@@ -27,6 +39,7 @@ public class DockerDeployMojo extends DockerMojo {
                 String ipDocker = getIpDocker();
                 // Do not remove the final slash
                 sendFile(file, sshForwardedPort, ipDocker, "/deploy/");
+                // All caontainer images must have a script 'deploy.sh'
                 executeShell(ipDocker, sshForwardedPort, "/bin/sh /deploy.sh "  + warFileName, null);
 
                 String tomcatForwardPort = getForwardedPort("8080");
