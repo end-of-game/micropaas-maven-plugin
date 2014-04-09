@@ -36,16 +36,16 @@ Pour pouvoir l'utiliser, il suffit d'ajouter la configuration du plugin dans le 
 Exemple de fichier *pom.xml*
 ```xml
 <plugin>
-						<groupId>fr.treeptik.micropaas.maven.plugins</groupId>
-						<artifactId>micropaas-maven-plugin</artifactId>
-						<version>0.0.1</version>
-						<configuration>
-							<urlDockerManager>http://192.168.1.103:4243</urlDockerManager>
-							<containerImage>micropaas/tomcat-mysql</containerImage>
-							<containerName>superProjetTest</containerName>
-							<databaseName>super-database</databaseName>
-						</configuration>
-					</plugin>
+	<groupId>fr.treeptik.micropaas.maven.plugins</groupId>
+	<artifactId>micropaas-maven-plugin</artifactId>
+	<version>0.0.1</version>
+	<configuration>
+		<urlDockerManager>http://192.168.1.103:4243</urlDockerManager>
+		<containerImage>micropaas/tomcat-mysql</containerImage>
+		<containerName>superProjetTest</containerName>
+		<databaseName>super-database</databaseName>
+	</configuration>
+</plugin>
 ``` 
 
 ## Exemple 
@@ -105,7 +105,6 @@ URL : http://192.168.0.109:49158/petclinic
 [INFO] ------------------------------------------------------------------------
                                                                                    
 ```
-
 L'application est maintenant accessible via l'URL précisée dans le résultat.  
 
 ###Base de données
@@ -145,8 +144,6 @@ Ensuite, il faut modifier la configuration spring de l'application d'exemple pou
 
 Exemple de fichier `jdbc.properties`
 ```properties
-
-
 #-------------------------------------------------------------------------------
 # MySQL Settings
 
