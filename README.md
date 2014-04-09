@@ -140,9 +140,9 @@ Une fois la nouvelle configuration faite on peut réinitialiser le container pou
 ```bash
 mvn  micropaas:reInitContainer 
 ```
-Ensuite, il faut modifier la configuration spring de l'application d'exemple pour qu'elle accède à la base Mysql. Pour cela il faut ouvrir le fichier  src/main/resources/spring/jdbc.properties, commenter tout ce qui concerne la base HSQLDB et dé-commenter les informations de la base Mysql. 
+Ensuite, il faut modifier la configuration spring de l'application d'exemple pour qu'elle accède à la base Mysql. Pour cela il faut ouvrir le fichier  src/main/resources/spring/data-access.properties, commenter tout ce qui concerne la base HSQLDB et dé-commenter les informations de la base Mysql. 
 
-Exemple de fichier `jdbc.properties`
+Exemple de fichier `data-access.properties`
 ```properties
 #-------------------------------------------------------------------------------
 # MySQL Settings
@@ -168,7 +168,7 @@ jpa.showSql=true
 Il ne reste plus qu'à compiler l'application et la déployer à nouveau. 
 
 ```bash
-mvn clean package micropaas:deploy
+mvn clean package -DskipTests micropaas:deploy
 ```
 
 That's it!
