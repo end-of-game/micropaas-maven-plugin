@@ -18,7 +18,7 @@ cd micropaas-docker-plugin
 mvn install 
 ```
 ### Version stable
-Il est aussi possible d'installer la dernière version stable en utilisant le dépôt Maven du projet **TODO : CREER LE REPO**
+Il est aussi possible d'installer la dernière version stable en utilisant le dépôt Maven du projet 
 ```xml
 <pluginRepositories>
 	<pluginRepository>
