@@ -1,8 +1,8 @@
 # MicroPaaS
-MicroPaas est une application permettant de déployer des applications Java et Java EE. MicroPaas à été développée sous la forme d'un plugin Maven et utilise en backend [Docker.io](http://www.docker.io). Ce projet développé par l'équipe de [CloudUnit](http://www.cloudunit.fr) à été conçu à l'occasion de [DevoxxFR-2014](http://cfp.devoxx.fr/devoxxfr2014/talk/CCA-308/Comment%20d%C3%A9velopper%20un%20PaaS%20Java%20en%2030%20minutes%20avec%20docker) 
+MicroPaas est une application permettant de déployer des applications Java et Java EE. MicroPaas a été développée sous la forme d'un plugin Maven et utilise en backend [Docker.io](http://www.docker.io). Ce projet développé par l'équipe de [CloudUnit](http://www.cloudunit.fr) a été conçu à l'occasion de [DevoxxFR-2014](http://cfp.devoxx.fr/devoxxfr2014/talk/CCA-308/Comment%20d%C3%A9velopper%20un%20PaaS%20Java%20en%2030%20minutes%20avec%20docker) 
 
 ## Pré-requis 
-* Docker 0.8.1 installé et accessible.
+* Docker 0.8.1 installé et accessible `sudo apt-get install lxc-docker-0.8.1`.
 * Les images Docker compatibles construites dans Docker (cf : projet [micropaas-image](https://github.com/Treeptik/micropaas-image))
 * Une version de Maven 3.* installée sur le poste de développement
 
