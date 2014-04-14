@@ -48,6 +48,18 @@ Exemple de fichier *pom.xml*
 </plugin>
 ``` 
 
+## Goals
+
+Sont disponibles 
+
+* micropaas:createContainer
+* micropaas:deploy
+* micropaas:reInitContainer
+* micropaas:removeContainer
+* micropaas:restartContainer
+* micropaas:startContainer
+* micropaas:stopContainer
+
 ## Exemple 
 
 Nous allons déployer l'application d'exemple [Pet clinic de Spring](https://github.com/spring-projects/spring-petclinic)
