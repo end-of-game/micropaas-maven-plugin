@@ -108,7 +108,7 @@ public abstract class DockerMojo extends AbstractMojo {
             containerConfig = new ContainerConfig();
             
             // All caontainer images must have a script 'start-service.sh'
-            String[] cmd = {"/bin/sh", "start-service.sh", databaseName};
+            String[] cmd = {"/bin/sh", "/start-service.sh", databaseName};
             containerConfig.setCmd(cmd);
             
             if (getContainerImage() != null) containerConfig.setImage(getContainerImage());
