@@ -45,7 +45,7 @@ public class DockerDeployMojo extends DockerMojo {
                 	File[] files = directory.listFiles(new FilenameFilter() {
 						@Override
 						public boolean accept(File file, String name) {
-							return (name.endsWith(".ear") || name.endsWith(".war")) ? true : false;
+							return (name.endsWith(".ear") || name.endsWith(".war") || name.endsWith(".jar")) ? true : false;
 						}
 					});
                 	
