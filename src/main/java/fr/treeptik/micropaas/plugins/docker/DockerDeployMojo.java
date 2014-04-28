@@ -1,15 +1,14 @@
 package fr.treeptik.micropaas.plugins.docker;
 
+import java.io.File;
+import java.io.FilenameFilter;
+
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 import com.google.common.base.Strings;
 
-import java.io.File;
-import java.io.FilenameFilter;
-
-@Mojo(name = "deploy", defaultPhase = LifecyclePhase.DEPLOY)
+@Mojo(name = "deploy")
 public class DockerDeployMojo extends DockerMojo {
 
 	/**

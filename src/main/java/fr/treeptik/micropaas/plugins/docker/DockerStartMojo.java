@@ -1,12 +1,11 @@
 package fr.treeptik.micropaas.plugins.docker;
 
-import com.kpelykh.docker.client.DockerException;
-
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
-@Mojo(name = "startContainer", defaultPhase=LifecyclePhase.COMPILE)
+import com.kpelykh.docker.client.DockerException;
+
+@Mojo(name = "startContainer")
 public class DockerStartMojo extends DockerMojo {
 
     public void execute() throws MojoExecutionException {
