@@ -35,6 +35,9 @@ public abstract class DockerMojo extends AbstractMojo {
     
     @Parameter
     protected String containerId;
+    
+    @Parameter
+    protected String archivePath;
 
     
     @Parameter
