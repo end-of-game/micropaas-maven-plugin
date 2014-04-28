@@ -39,9 +39,6 @@ public abstract class DockerMojo extends AbstractMojo {
     @Parameter
     protected String archivePath;
 
-    
-    @Parameter
-    protected String[] exposedPorts;
 
     protected String getAbsolutePathWarFile() {
         MavenProject mavenProject = (MavenProject) getPluginContext().get("project");
@@ -146,13 +143,6 @@ public abstract class DockerMojo extends AbstractMojo {
 		this.containerName = containerName;
 	}
 
-	public String[] getExposedPorts() {
-		return exposedPorts;
-	}
-
-	public void setExposedPorts(String[] exposedPorts) {
-		this.exposedPorts = exposedPorts;
-	}
 
     protected int executeShell(String ipDocker, String sshPort, String command, Map<String, String> configShell) throws Exception {
 
